@@ -1,0 +1,18 @@
+openapi: 3.1.0
+info:
+  title: AI Memory and Context API
+  version: 0.3.0
+  description: Local user-scoped memory and context boundary; document-RAG data is excluded.
+servers:
+  - url: http://127.0.0.1:8205
+paths:
+  /v1/context/build:
+    post: {description: Build context for one validated user and session.}
+  /v1/context/turns:
+    post: {description: Record one completed user/assistant turn.}
+  /v1/memories:
+    get: {description: List memories for one user.}
+    post: {description: Create an explicit memory entry.}
+    delete: {description: Clear all memory and session turns for one user.}
+  /v1/memories/{memory_id}:
+    delete: {description: Delete one user-scoped memory entry.}

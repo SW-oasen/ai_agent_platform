@@ -1,0 +1,131 @@
+openapi: 3.1.0
+info:
+  title: AI Agent Core API
+  version: 0.3.0
+  description: >-
+    Local Core-Agent boundary for text clients and the Conversation Orchestrator.
+    All runs are scoped to an authenticated user and a session.
+servers:
+  - url: http://127.0.0.1:8201
+paths:
+  /v1/health:
+    get:
+      operationId: agentHealth
+      responses:
+        '200':
+          description: Agent service is ready.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /v1/tools:
+    get:
+      operationId: listTools
+      responses:
+        '200':
+          description: Registered tool specifications.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ToolSpec'
+  /v1/chat:
+    post:
+      operationId: createChatRun
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentRequest'
+      responses:
+        '200':
+          description: Completed agent response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentResponse'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/chat/stream:
+    post:
+      operationId: streamChatRun
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentRequest'
+      responses:
+        '200':
+          description: Server-Sent Event stream; each data payload validates against agent-events.schema.json.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  responses:
+    Problem:
+      description: Structured request or run failure.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    Health:
+      type: object
+      required: [status]
+      properties:
+        status: {type: string, enum: [ok]}
+    AgentRequest:
+      type: object
+      additionalProperties: false
+      required: [user_id, session_id, turn_id, correlation_id, message]
+      properties:
+        user_id: {type: string, minLength: 1}
+        session_id: {type: string, minLength: 1}
+        turn_id: {type: string, minLength: 1}
+        correlation_id: {type: string, minLength: 1}
+        message: {type: string, minLength: 1}
+        context:
+          type: object
+          additionalProperties: true
+    AgentResponse:
+      type: object
+      required: [session_id, run_id, message]
+      properties:
+        session_id: {type: string}
+        run_id: {type: string}
+        message: {type: string}
+        tool_results:
+          type: array
+          items: {$ref: '#/components/schemas/ToolResult'}
+    ToolSpec:
+      type: object
+      required: [name, description, parameters, side_effect, requires_confirmation]
+      properties:
+        name: {type: string}
+        description: {type: string}
+        parameters: {type: object, additionalProperties: true}
+        side_effect: {type: string, enum: [read_only, side_effect]}
+        requires_confirmation: {type: boolean}
+    ToolResult:
+      type: object
+      required: [tool_call_id, name, content]
+      properties:
+        tool_call_id: {type: string}
+        name: {type: string}
+        content: {type: string}
+        metadata: {type: object, additionalProperties: true}
+        error: {type: [string, 'null']}
+    Problem:
+      type: object
+      required: [code, message, correlation_id, retryable]
+      properties:
+        code: {type: string}
+        message: {type: string}
+        correlation_id: {type: string}
+        retryable: {type: boolean}

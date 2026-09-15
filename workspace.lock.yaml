@@ -1,0 +1,29 @@
+# The component revisions validated together for a platform release.
+# Run scripts/diagnose.ps1 after changing a component, then replace every
+# UNRESOLVED value with the component repository's immutable commit SHA.
+lock_version: 1
+contract_version: 0.3.0
+components:
+  core_agent:
+    path: apps/ai_agent_core
+    remote: UNRESOLVED
+    ref: UNRESOLVED
+  voice_runtime:
+    path: apps/ai_voice_agent_local
+    remote: UNRESOLVED
+    ref: UNRESOLVED
+  conversation_orchestrator:
+    path: services/ai_conversation_orchestrator
+    remote: UNRESOLVED
+    ref: UNRESOLVED
+  memory_context_service:
+    path: services/ai_memory_context_service
+    remote: UNRESOLVED
+    ref: UNRESOLVED
+  rag:
+    path: services/ai_rag_local
+    remote: UNRESOLVED
+    ref: UNRESOLVED
+validated_at: null
+notes: >-
+  Initial platform foundation. No integrated release has been validated yet.

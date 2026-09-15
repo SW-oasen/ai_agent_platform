@@ -1,0 +1,29 @@
+{
+  "$schema": "../contracts/platform-settings.schema.json",
+  "schema_version": "0.3.0",
+  "revision": 1,
+  "services": {
+    "web_ui": {"url": "http://127.0.0.1:8200"},
+    "core_agent": {"url": "http://127.0.0.1:8201"},
+    "orchestrator": {"url": "http://127.0.0.1:8202"},
+    "memory_context": {"url": "http://127.0.0.1:8205"},
+    "rag": {"url": "http://127.0.0.1:8203"},
+    "voice_runtime": {"url": "ws://127.0.0.1:8204"}
+  },
+  "agent": {
+    "model": "qwen3:8b",
+    "model_base_url": "http://127.0.0.1:11434/v1",
+    "timeout_seconds": 120,
+    "max_tool_steps": 8
+  },
+  "voice": {
+    "tts_provider": "piper",
+    "tts_voice": "default",
+    "tts_language": "de-DE",
+    "tts_auto_language_routing": true,
+    "barge_in_enabled": false
+  },
+  "features": {
+    "rag_enabled": false
+  }
+}

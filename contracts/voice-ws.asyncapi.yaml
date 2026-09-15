@@ -1,0 +1,46 @@
+asyncapi: 3.0.0
+info:
+  title: AI Agent Platform Voice Runtime Protocol
+  version: 0.3.0
+  description: >-
+    Local WebSocket boundary between a Voice Runtime and the Conversation
+    Orchestrator. Payloads validate against voice-orchestrator.schema.json.
+servers:
+  local:
+    host: 127.0.0.1:8204
+    protocol: ws
+channels:
+  conversation:
+    address: /v1/voice/conversation
+    messages:
+      turnSubmitted:
+        $ref: '#/components/messages/TurnSubmitted'
+      cancelRequested:
+        $ref: '#/components/messages/CancelRequested'
+      agentEvent:
+        $ref: '#/components/messages/AgentEvent'
+operations:
+  submitVoiceTurn:
+    action: send
+    channel:
+      $ref: '#/channels/conversation'
+    messages:
+      - $ref: '#/channels/conversation/messages/turnSubmitted'
+      - $ref: '#/channels/conversation/messages/cancelRequested'
+  receiveAgentEvent:
+    action: receive
+    channel:
+      $ref: '#/channels/conversation'
+    messages:
+      - $ref: '#/channels/conversation/messages/agentEvent'
+components:
+  messages:
+    TurnSubmitted:
+      payload:
+        $ref: './voice-orchestrator.schema.json'
+    CancelRequested:
+      payload:
+        $ref: './voice-orchestrator.schema.json'
+    AgentEvent:
+      payload:
+        $ref: './agent-events.schema.json'

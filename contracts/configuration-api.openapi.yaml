@@ -1,0 +1,72 @@
+openapi: 3.1.0
+info:
+  title: AI Agent Platform Configuration API
+  version: 0.3.0
+  description: >-
+    Authenticated control-plane API. It owns the non-secret platform settings
+    document and uses optimistic concurrency; it never exposes or stores secrets.
+servers:
+  - url: http://127.0.0.1:8202
+paths:
+  /v1/platform-settings:
+    get:
+      operationId: getPlatformSettings
+      responses:
+        '200':
+          description: Current settings snapshot; ETag equals its revision.
+          headers:
+            ETag: {schema: {type: string}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PlatformSettings'}
+    put:
+      operationId: replacePlatformSettings
+      parameters:
+        - in: header
+          name: If-Match
+          required: true
+          schema: {type: string}
+          description: Revision returned by GET, quoted as an HTTP ETag.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PlatformSettings'}
+      responses:
+        '200':
+          description: Validated settings persisted and a newer revision assigned.
+          headers:
+            ETag: {schema: {type: string}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PlatformSettings'}
+        '409':
+          description: Settings changed since the caller read them; reload before retrying.
+        '422':
+          description: Schema or policy validation failed.
+  /v1/platform-settings/apply-status:
+    get:
+      operationId: getSettingsApplyStatus
+      responses:
+        '200':
+          description: Revision applied by each service.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [revision, services]
+                properties:
+                  revision: {type: integer}
+                  services:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      required: [applied_revision, state]
+                      properties:
+                        applied_revision: {type: integer}
+                        state: {type: string, enum: [applied, pending_restart, failed]}
+                        message: {type: string}
+components:
+  schemas:
+    PlatformSettings:
+      $ref: './platform-settings.schema.json'

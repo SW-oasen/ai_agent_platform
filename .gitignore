@@ -1,0 +1,12 @@
+apps/
+services/
+!services/
+services/*
+.env
+data/
+*.log
+__pycache__/
+*.py[cod]
+*.sqlite3
+config/platform.settings.json
+deployments/ai_document_service/

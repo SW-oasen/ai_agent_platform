@@ -1,0 +1,84 @@
+openapi: 3.1.0
+info:
+  title: AI Document Service API
+  version: 1.0.0
+paths:
+  /health:
+    get:
+      responses:
+        '200': {description: Service status}
+  /v1/documents:
+    post:
+      summary: Extract one document synchronously
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: false
+          schema: {type: string, maxLength: 128}
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [document_id, file]
+              properties:
+                document_id: {type: string}
+                file: {type: string, format: binary}
+                index: {type: boolean, default: false}
+                detect_barcodes: {type: boolean, default: false}
+                async_mode: {type: boolean, default: false}
+      responses:
+        '200': {description: Extracted document with ordered pages, or queued job when async_mode is true}
+        '401': {description: Authentication failed}
+        '409': {description: Document ID conflicts with an existing processed document}
+        '413': {description: Upload limit exceeded}
+        '422': {description: Invalid request or extraction failure}
+  /v1/barcodes/decode:
+    post:
+      summary: Decode local 2D barcodes from a PDF or supported scan image without retaining it
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: {type: string, format: binary}
+      responses:
+        '200': {description: Decoded barcode items; binary payloads use hexadecimal strings}
+        '422': {description: Unsupported document or decoding failure}
+  /v1/jobs/{job_id}:
+    get:
+      summary: Read asynchronous extraction status and result
+      parameters:
+        - in: path
+          name: job_id
+          required: true
+          schema: {type: string}
+      responses:
+        '200': {description: Job status, and result after success}
+        '404': {description: Unknown job}
+    delete:
+      summary: Cancel a queued extraction job
+      responses:
+        '200': {description: Job cancelled}
+        '404': {description: Unknown job}
+        '409': {description: Job has already started or completed}
+  /v1/search:
+    post:
+      summary: Search indexed document content semantically
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query: {type: string, minLength: 1}
+                top_k: {type: integer, minimum: 1, maximum: 50, default: 5}
+      responses:
+        '200': {description: Ordered semantic matches}
+        '503': {description: Semantic search disabled or not configured}

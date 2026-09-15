@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-agent-platform.local/contracts/agent-events/0.3.0",
+  "title": "AI Agent Stream Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "user_id", "session_id", "turn_id", "correlation_id", "run_id", "data"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["run.started", "assistant.delta", "tool.requested", "tool.started", "tool.completed", "tool.failed", "confirmation.required", "run.completed", "run.failed", "run.cancelled"]
+    },
+    "user_id": {"type": "string", "minLength": 1},
+    "session_id": {"type": "string", "minLength": 1},
+    "turn_id": {"type": "string", "minLength": 1},
+    "correlation_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "message_id": {"type": "string"},
+    "tool_call_id": {"type": "string"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "data": {"type": "object", "additionalProperties": true}
+  }
+}

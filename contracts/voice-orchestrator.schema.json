@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ai-agent-platform.local/contracts/voice-orchestrator/0.3.0",
+  "title": "Voice Runtime to Conversation Orchestrator",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "user_id", "session_id", "turn_id", "correlation_id"],
+  "properties": {
+    "type": {"type": "string", "enum": ["turn.submitted", "run.cancel_requested"]},
+    "user_id": {"type": "string", "minLength": 1},
+    "session_id": {"type": "string", "minLength": 1},
+    "turn_id": {"type": "string", "minLength": 1},
+    "correlation_id": {"type": "string", "minLength": 1},
+    "transcript": {"type": "string", "minLength": 1},
+    "language": {"type": "string"},
+    "input_mode": {"const": "voice"},
+    "run_id": {"type": "string", "minLength": 1},
+    "reason": {"type": "string"}
+  },
+  "oneOf": [
+    {"properties": {"type": {"const": "turn.submitted"}}, "required": ["transcript", "input_mode"]},
+    {"properties": {"type": {"const": "run.cancel_requested"}}, "required": ["run_id"]}
+  ]
+}

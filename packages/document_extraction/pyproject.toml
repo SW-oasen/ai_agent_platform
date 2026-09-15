@@ -1,0 +1,10 @@
+[project]
+name = "document-extraction"
+version = "0.1.0"
+description = "Framework-independent local document extraction contracts and MinerU adapter."
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+

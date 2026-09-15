@@ -1,0 +1,46 @@
+openapi: 3.1.0
+info:
+  title: AI Conversation Orchestrator API
+  version: 0.3.0
+  description: Local channel-neutral boundary that forwards validated turns to the Core Agent.
+servers:
+  - url: http://127.0.0.1:8202
+paths:
+  /v1/health:
+    get:
+      responses:
+        '200': {description: Orchestrator is ready}
+  /v1/turns:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Turn'}
+      responses:
+        '200': {description: Completed Core Agent response}
+        '422': {description: Invalid turn identity or message}
+        '502': {description: Core Agent unavailable}
+  /v1/turns/stream:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Turn'}
+      responses:
+        '200': {description: Forwarded Core Agent SSE stream}
+components:
+  schemas:
+    Turn:
+      type: object
+      additionalProperties: false
+      required: [user_id, session_id, turn_id, correlation_id, message]
+      properties:
+        user_id: {type: string, minLength: 1}
+        session_id: {type: string, minLength: 1}
+        turn_id: {type: string, minLength: 1}
+        correlation_id: {type: string, minLength: 1}
+        message: {type: string, minLength: 1}
+        input_mode: {type: string, enum: [text, voice], default: text}
+        context: {type: object, additionalProperties: true}
