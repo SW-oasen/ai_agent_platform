@@ -17,6 +17,7 @@ deployments/*
 output/
 .pytest_cache/
 .pytest-tmp/
+examples/zxing-jni/
 examples/zxing-jni/build/
 examples/zxing-jni/*.dll
 zxing-examples.zip
