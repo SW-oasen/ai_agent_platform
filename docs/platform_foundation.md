@@ -1,5 +1,8 @@
 # Platform Foundation
 
+> Siehe auch den zentralen [AI Agent Platform Projektueberblick](../README.md)
+> fuer Zielbild, Architektur und Bedienung.
+
 The platform repository contains contracts, integration configuration and diagnostics; it does not contain component application code. `apps/` and `services/` are local workspaces for independent repositories and remain ignored by the platform Git repository.
 
 ## First local setup
@@ -27,7 +30,7 @@ $env:PLATFORM_SETTINGS_PATH = (Resolve-Path config/platform.settings.json)
 
 Contract versioning is defined by `contracts/VERSION`. Additive optional fields are minor changes; removing, renaming or changing required fields is a major change.
 
-The version 0.1.0 contracts are the target boundary. Existing Core and Voice prototypes do not yet implement every required identity field, event name or cancellation endpoint. That migration belongs to the next implementation increment.
+The version 0.3.0 contracts are the active boundary. Core, Orchestrator and the text Web UI use the required platform identities; Voice integration remains optional.
 
 ## Local port allocation
 

@@ -1,0 +1,15 @@
+services:
+  searxng:
+    image: searxng/searxng:latest
+    container_name: ai-agent-platform-searxng
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8206:8080"
+    environment:
+      SEARXNG_SECRET: ${SEARXNG_SECRET:?SEARXNG_SECRET must be set by local-searxng.ps1}
+      SEARXNG_BIND_ADDRESS: 0.0.0.0
+      SEARXNG_PORT: "8080"
+    volumes:
+      - ./settings.yml:/etc/searxng/settings.yml:ro
+    tmpfs:
+      - /var/cache/searxng

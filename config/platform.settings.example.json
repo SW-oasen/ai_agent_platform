@@ -8,13 +8,15 @@
     "orchestrator": {"url": "http://127.0.0.1:8202"},
     "memory_context": {"url": "http://127.0.0.1:8205"},
     "rag": {"url": "http://127.0.0.1:8203"},
-    "voice_runtime": {"url": "ws://127.0.0.1:8204"}
+    "voice_runtime": {"url": "ws://127.0.0.1:8204"},
+    "searxng": {"url": "http://127.0.0.1:8206"}
   },
   "agent": {
     "model": "qwen3:8b",
     "model_base_url": "http://127.0.0.1:11434/v1",
     "timeout_seconds": 120,
-    "max_tool_steps": 8
+    "max_tool_steps": 8,
+    "knowledge_cutoff": "2024-06-01"
   },
   "voice": {
     "tts_provider": "piper",

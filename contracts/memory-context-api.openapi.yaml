@@ -16,3 +16,11 @@ paths:
     delete: {description: Clear all memory and session turns for one user.}
   /v1/memories/{memory_id}:
     delete: {description: Delete one user-scoped memory entry.}
+  /v1/sessions:
+    get: {description: List compact user-scoped conversation sessions.}
+  /v1/sessions/{session_id}:
+    delete: {description: Delete all turns in one user-scoped session.}
+  /v1/sessions/{session_id}/turns:
+    get: {description: List complete user/assistant turns in one session.}
+  /v1/sessions/{session_id}/turns/{turn_id}:
+    delete: {description: Delete a complete user/assistant turn.}

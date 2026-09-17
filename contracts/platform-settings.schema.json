@@ -19,7 +19,8 @@
         "orchestrator": {"$ref": "#/$defs/httpService"},
         "memory_context": {"$ref": "#/$defs/httpService"},
         "rag": {"$ref": "#/$defs/httpService"},
-        "voice_runtime": {"$ref": "#/$defs/webSocketService"}
+        "voice_runtime": {"$ref": "#/$defs/webSocketService"},
+        "searxng": {"$ref": "#/$defs/httpService"}
       }
     },
     "agent": {
@@ -30,7 +31,8 @@
         "model": {"type": "string", "minLength": 1},
         "model_base_url": {"type": "string", "format": "uri"},
         "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 600},
-        "max_tool_steps": {"type": "integer", "minimum": 1, "maximum": 32}
+        "max_tool_steps": {"type": "integer", "minimum": 1, "maximum": 32},
+        "knowledge_cutoff": {"type": "string", "format": "date"}
       }
     },
     "voice": {

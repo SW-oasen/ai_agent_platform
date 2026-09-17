@@ -30,6 +30,15 @@ paths:
             schema: {$ref: '#/components/schemas/Turn'}
       responses:
         '200': {description: Forwarded Core Agent SSE stream}
+  /v1/runs/{run_id}/cancel:
+    post:
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema: {type: string, minLength: 1}
+      responses:
+        '200': {description: Cancellation was forwarded to the Core Agent.}
 components:
   schemas:
     Turn:
@@ -41,6 +50,7 @@ components:
         session_id: {type: string, minLength: 1}
         turn_id: {type: string, minLength: 1}
         correlation_id: {type: string, minLength: 1}
+        run_id: {type: string, minLength: 1}
         message: {type: string, minLength: 1}
         input_mode: {type: string, enum: [text, voice], default: text}
         context: {type: object, additionalProperties: true}

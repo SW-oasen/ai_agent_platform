@@ -66,6 +66,16 @@ paths:
                 type: string
         default:
           $ref: '#/components/responses/Problem'
+  /v1/runs/{run_id}/cancel:
+    post:
+      operationId: cancelAgentRun
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema: {type: string, minLength: 1}
+      responses:
+        '200': {description: Cancellation was requested or the run has already completed.}
 components:
   responses:
     Problem:
@@ -89,6 +99,7 @@ components:
         session_id: {type: string, minLength: 1}
         turn_id: {type: string, minLength: 1}
         correlation_id: {type: string, minLength: 1}
+        run_id: {type: string, minLength: 1}
         message: {type: string, minLength: 1}
         context:
           type: object

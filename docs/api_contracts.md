@@ -1,5 +1,7 @@
 # API- und Event-Contracts
 
+> Kontext und Komponentenueberblick: [AI Agent Platform](../README.md).
+
 ## Versionierung
 
 Die aktuelle Contract-Version steht in `contracts/VERSION`. API- und
@@ -18,9 +20,18 @@ Wichtige Endpunkte:
 - `GET /v1/health`
 - `GET /v1/tools`
 - `POST /v1/chat`
+- `POST /v1/runs/{run_id}/cancel`
+
+Channels may provide a `run_id` before the run starts. Cancellation is
+idempotent and returns `cancellation_requested` or `already_finished`.
+Streaming runs emit `run.cancelled`. The operational flow and limits are in
+[cancellation.md](cancellation.md).
 - `POST /v1/chat/stream`
 
 ## Voice Runtime und Orchestrator
+
+Voice Barge-in uses the same `run_id` as the active Core run. The Orchestrator
+forwards `POST /v1/runs/{run_id}/cancel` without changing that identity.
 
 `voice-ws.asyncapi.yaml` dokumentiert die lokale WebSocket-Verbindung.
 Voice Runtime sendet `turn.submitted` und `run.cancel_requested`; der
